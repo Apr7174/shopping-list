@@ -1,25 +1,41 @@
-// first = object that contains the applications state
+// FIRST = object that contains the applications state
 // single state object that contains property called items which will have the items on the list
+// sets up new object - inside object is array
 var state = {
 	items: []
 };
 
 // NEW
 // state of an item on the list
-var itemStatus = {
-	// this needs to say not deleted and not checked
-}
+// why () not {} - not an object, allows you to write more neatly to variable
+// dont put any variables in here, just have something to target
+// wont display on its own - need a function to manage the state of the display
+var itemStatus = (
+	'<li>' + 
+    	'<span class="shopping-item"></span>' +
+        '<div class="shopping-item-controls">' +
+        	'<button class="shopping-item-toggle">' +
+            	'<span class="button-label">check</span>' +
+            '</button>' +
+            '<button class="shopping-item-delete">' +
+              '<span class="button-label">delete</span>' +
+            '</button>' +
+        '</div>' +
+    '</li>' 
+
+);
 
 
-// second = functions that modify the state
+// SECOND = functions that modify the state
 // takes state as first argument and additional data as second arguments
+//second variable name item is just mainly for clarity, dont need to reference it when its called
 var addItem = function(state, item) {
 	state.items.push(item);
 };
 
 // NEW
 // function that modifies item status
-var checkItem = function(itemStatus, checked) {
+var checkItem = function(itemStatus, item) {
 	// cross out item
 }
 
@@ -34,16 +50,37 @@ var deleteItem = function(itemStatus, item) {
 
 }
 
+
+
 // third = functions that render html into a DOM element
-//takes a state object as first argument and a DOM to render into as second argument
+//takes a state object as first argument and a DOM element to render into as second argument
 var renderList = function(state, element) {
 	var itemsHTML = state.items.map(function(item) {
-		return '<li>' + item + '</li>';
+		// console.log(itemStatus);
+		return renderItem(item);
 	});
-	element.html(itemsHTML);
+	// console.log(itemsHTML[0]);
+	// element.html(itemsHTML[0]);
 };
 
+// display the itemStatus boxes
+var renderItem = function(itemStatus, item) {
+	// translates itemStatus into jQuery selector
+	var element = $(itemStatus);
+	// console.log(item);
+	// console.log(element);
 
+	// jQuery method to search for a string
+	element.find('.shopping-item').text(item);
+	return element;
+	}
+
+
+// NEW - constructs HTML to put into DOM element
+var renderChecked = function(checkItem, element) {
+	var checkHTML = checkItem
+	return '<button>Check</button>';
+} 
 
 
 // final section is jQuery event listeners
@@ -51,7 +88,7 @@ var renderList = function(state, element) {
 $(document).ready(function() {
 	$('#js-shopping-list-form').submit(function(event) {
 		event.preventDefault();
-		//grabs the text that was entered
+		//grabs the text that was entered, takes in state and item=$('#shopping-list-entry').val()
 		addItem(state, $('#shopping-list-entry').val());
 		// targets the class=shopping-list ul
 		renderList(state, $('.shopping-list'));
